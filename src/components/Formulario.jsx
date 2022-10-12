@@ -4,6 +4,7 @@ const Formulario = () => {
     const [fruta, setFruta] = useState('')
     const [descripción, setDescripcion] = useState('')
     const [listaFrutas, setlistaFrutas]=useState([])
+    
 
 
     
