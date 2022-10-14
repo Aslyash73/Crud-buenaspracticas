@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 //import Formulario from '.components/Formulario';
-import { Variables } from './components/Variables';
+//import { Variables } from './components/Variables';
+//import { Contador } from './components/Contador';
+import Formulario from './components/Formulario';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Variables />
+    <Formulario />
   </React.StrictMode>
 );
 
