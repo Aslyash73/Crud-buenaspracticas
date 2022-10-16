@@ -15,7 +15,9 @@ const Formulario = () => {
     const [listaFrutas, setListaFrutas] = useState([])
     const [modoEdicion, setModoEdicion] = useState(false)
     const [id, setId] = useState('')
+    
  
+
 
     useEffect(() => {
         const obtenerDatos = async () => {
@@ -90,9 +92,7 @@ const Formulario = () => {
             })
 
             const nuevoArray = listaFrutas.map(
-                item => item.id === id ? {id: id, nombreFruta:fruta, nombreDescripcion:descripcion
-                    ,comprador:nombreComprador,
-                    nidentificacion:identificacion,
+                item => item.id === id ? {id: id, nombreFruta:fruta, nombreDescripcion:descripcion ,comprador:nombreComprador,nidentificacion:identificacion,
                     npais:pais,
                     nedad:edad,
                     nsexo:sexo                
@@ -168,8 +168,8 @@ const Formulario = () => {
                             listaFrutas.map(item => (
                                 <li className="list-group-item" key={item.id}>
                                     <span className="lead">{item.nombreFruta}-{item.nombreDescripcion}
-                                    -{item.nombreComprador}-{item.identificacion}-{item.pais}
-                                    -{item.edad}-{item.sexo}
+                                    -{item.comprador}-{item.nidentificacion}-{item.npais}
+                                    -{item.nedad}-{item.nsexo}
                                     </span>
                                     <button className="btn btn-danger btn-sm float-end mx-2"
                                         onClick={() => eliminar(item.id)}>Eliminar</button>
@@ -181,8 +181,33 @@ const Formulario = () => {
                         }
                     </ul>
                 </div>
-
-
+                
+                <table className="table">
+    <thead>
+       <tr>
+         <th>FRUTA</th>
+         <th>DESCRIPCION</th>
+         <th>NOMBRE COMPRADOR</th>
+         <th>IDENTIFICACION</th>
+         <th>PAIS</th>
+         <th>EDAD</th>
+         <th>SEXO</th>
+       </tr>
+    </thead>
+    <tbody>
+      {Object.keys(item).map((key) => (
+        <tr key={item[key].id}>
+        <td>{item[key].fruta}</td>
+        <td>{item[key].nombreDescripcion}</td>
+        <td>{item[key].nombreComprador}</td>
+        <td>{item[key].identification}</td>
+        <td>{item[key].npais}</td>
+        <td>{item[key].nedad}</td>
+        <td>{item[key].nsexo}</td>
+       ))
+      }
+    </tbody>
+</table>
                 <div className='col-4'>
                     <h4 className='text-center'>
                         {
