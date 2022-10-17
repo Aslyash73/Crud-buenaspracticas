@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react' //el useEffect genera la vizualizacion del estado
+import TableData from './TableData';
 import { db } from '../firebase';
 import { collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot } from 'firebase/firestore';
 
 
 const Formulario = () => {
     const [fruta, setFruta] = useState('')
+    const [errors, setErrors] = useState({})
     const [descripcion, setDescripcion] = useState('')
     const [nombreComprador, setnombreComprador] = useState('')
     const [identificacion, setidentificacion] = useState('')
@@ -15,8 +17,8 @@ const Formulario = () => {
     const [listaFrutas, setListaFrutas] = useState([])
     const [modoEdicion, setModoEdicion] = useState(false)
     const [id, setId] = useState('')
-    
- 
+
+
 
 
     useEffect(() => {
@@ -40,27 +42,75 @@ const Formulario = () => {
         }
     }
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!fruta.trim()) {
+            setErrors({ fruta: "la fruta es requerida" });
+            return;
+        }
+
+        if (!descripcion.trim()) {
+            setErrors({ descripcion: "La descripcion es requerida" });
+            return;
+        }
+
+        if (!nombreComprador.trim()) {
+            setErrors({ nombreComprador: "El nombre del comprador  es requerido" });
+            return;
+        }
+        if (!identificacion.trim()) {
+            setErrors({ identificacion: "La identificacion es requerida" });
+            return;
+        }
+        if (!pais.trim()) {
+            setErrors({ pais: "El pais es requerido" });
+            return;
+        }
+        if (!edad.trim()) {
+            setErrors({ edad: "La edad es requerida" });
+            return;
+        }
+        if (!sexo.trim()) {
+            setErrors({ sexo: "el sexo es requerido" });
+            return;
+        }
+
+
+        setFruta('')
+        setDescripcion('')
+        setnombreComprador('')
+        setidentificacion('')
+        setpais('')
+        setedad('')
+        setsexo('')
+
+
+        console.log("Registrado");
+        guardarFrutas();
+    };
+
 
     const guardarFrutas = async (e) => {
-        e.preventDefault()
         try {
             const data = await addDoc(collection(db, 'frutas'), {
                 nombreFruta: fruta,
                 nombreDescripcion: descripcion,
-                comprador:nombreComprador,
-                nidentificacion:identificacion,
-                npais:pais,
-                nedad:edad,
-                nsexo:sexo
+                comprador: nombreComprador,
+                nidentificacion: identificacion,
+                npais: pais,
+                nedad: edad,
+                nsexo: sexo
             })
             setListaFrutas([
                 ...listaFrutas,
-                { nombreFruta: fruta, nombreDescripcion: descripcion, id: data.id,
-                    comprador:nombreComprador,
-                    nidentificacion:identificacion,
-                    npais:pais,
-                    nedad:edad,
-                    nsexo:sexo
+                {
+                    nombreFruta: fruta, nombreDescripcion: descripcion, id: data.id,
+                    comprador: nombreComprador,
+                    nidentificacion: identificacion,
+                    npais: pais,
+                    nedad: edad,
+                    nsexo: sexo
                 }
             ])
 
@@ -71,6 +121,7 @@ const Formulario = () => {
             setpais('')
             setedad('')
             setsexo('')
+            setErrors('')
 
         } catch (error) {
             console.log(error)
@@ -78,27 +129,30 @@ const Formulario = () => {
     }
 
     const editarFrutas = async (e) => {
-        e.preventDefault()
-        try{
+        try {
             const docRef = doc(db, 'frutas', id);
             await updateDoc(docRef, {
-                nombreFruta:fruta,
-                nombreDescripcion:descripcion,
-                comprador:nombreComprador,
-                nidentificacion:identificacion,
-                npais:pais,
-                nedad:edad,
-                nsexo:sexo
+                nombreFruta: fruta,
+                nombreDescripcion: descripcion,
+                comprador: nombreComprador,
+                nidentificacion: identificacion,
+                npais: pais,
+                nedad: edad,
+                nsexo: sexo
             })
 
             const nuevoArray = listaFrutas.map(
-                item => item.id === id ? {id: id, nombreFruta:fruta, nombreDescripcion:descripcion ,comprador:nombreComprador,nidentificacion:identificacion,
-                    npais:pais,
-                    nedad:edad,
-                    nsexo:sexo                
+                item => item.id === id ? {
+                    id: id, nombreFruta: fruta,
+                    nombreDescripcion: descripcion,
+                    comprador: nombreComprador,
+                    nidentificacion: identificacion,
+                    npais: pais,
+                    nedad: edad,
+                    nsexo: sexo
                 } : item
             )
-            
+
             setListaFrutas(nuevoArray)
             setFruta('')
             setDescripcion('')
@@ -109,22 +163,71 @@ const Formulario = () => {
             setedad('')
             setsexo('')
             setModoEdicion(false)
+            setErrors('')
 
-        }catch(error){
+        } catch (error) {
             console.log(error)
         }
     }
+
+    const handleEditar = async (e) => {
+        e.preventDefault();
+
+        if (!fruta.trim()) {
+            setErrors({ fruta: "la fruta es requerida" });
+            return;
+        }
+
+        if (!descripcion.trim()) {
+            setErrors({ descripcion: "La descripcion es requerida" });
+            return;
+        }
+
+        if (!nombreComprador.trim()) {
+            setErrors({ nombreComprador: "El nombre del comprador  es requerido" });
+            return;
+        }
+        if (!identificacion.trim()) {
+            setErrors({ identificacion: "La identificacion es requerida" });
+            return;
+        }
+        if (!pais.trim()) {
+            setErrors({ pais: "El pais es requerido" });
+            return;
+        }
+        if (!edad.trim()) {
+            setErrors({ edad: "La edad es requerida" });
+            return;
+        }
+        if (!sexo.trim()) {
+            setErrors({ sexo: "el sexo es requerido" });
+            return;
+        }
+
+
+        setFruta('')
+        setDescripcion('')
+        setnombreComprador('')
+        setidentificacion('')
+        setpais('')
+        setedad('')
+        setsexo('')
+
+
+        console.log("Registrado");
+        editarFrutas();
+    };
 
 
 
     const editar = item => {
         setFruta(item.nombreFruta)
         setDescripcion(item.nombreDescripcion)
-        setnombreComprador(item.nombreComprador)
-        setidentificacion(item.identificacion)
-        setpais(item.pais)
-        setedad(item.edad)
-        setsexo(item.sexo)
+        setnombreComprador(item.comprador)
+        setidentificacion(item.nidentificacion)
+        setpais(item.npais)
+        setedad(item.nedad)
+        setsexo(item.nsexo)
         setId(item.id)
         setModoEdicion(true)
     }
@@ -141,80 +244,51 @@ const Formulario = () => {
         setsexo('')
     }
 
-    
+
+
     const imagen = 'https://picsum.photos/300'
     const texto_alt = 'esto es una imagen de picsum'
 
     return (
-        
+
         <div className='container mt-5'>
             <h1 className="text-center">CRUD BÁSCIO BUENAS PRÁCTICAS</h1>
             <hr />
-            <div className='text-center'><h4>Imagenes aleatorias</h4>
+            <div className='text-center d-flex justify-content-between'>
 
-            <div>
-    
-    <img src={imagen} alt= {texto_alt}></img>
-    </div>
-            
-            
-            </div>
-            <hr/>
-            < div className='row'>
-                <div className='col-8'>
-                    <h4 className='text-center'>Listado de frutas</h4>
-                    <ul className='list-group'>
-                        {
-                            listaFrutas.map(item => (
-                                <li className="list-group-item" key={item.id}>
-                                    <span className="lead">{item.nombreFruta}-{item.nombreDescripcion}
-                                    -{item.comprador}-{item.nidentificacion}-{item.npais}
-                                    -{item.nedad}-{item.nsexo}
-                                    </span>
-                                    <button className="btn btn-danger btn-sm float-end mx-2"
-                                        onClick={() => eliminar(item.id)}>Eliminar</button>
-                                    <button className="btn btn-warning btn-sm float-end"
-                                        onClick={() => editar(item)}>Editar</button>
-
-                                </li>
-                            ))
-                        }
-                    </ul>
+                <div>
+                    <h4>Imagenes aleatorias</h4>
+                    <img src={imagen} alt={texto_alt} style={{ width: '100%' }}></img>
+                    {(
+                        errors.fruta ||
+                        errors.descripcion ||
+                        errors.nombreComprador ||
+                        errors.identificacion ||
+                        errors.pais ||
+                        errors.edad ||
+                        errors.sexo
+                    ) ? (
+                        <div className="alert alert-danger mt-4">
+                            <p>{
+                                errors.fruta ||
+                                errors.descripcion ||
+                                errors.nombreComprador ||
+                                errors.identificacion ||
+                                errors.pais ||
+                                errors.edad ||
+                                errors.sexo}</p>
+                        </div>
+                    ) : <>
+                    </>}
                 </div>
-                
-                <table className="table">
-    <thead>
-       <tr>
-         <th>FRUTA</th>
-         <th>DESCRIPCION</th>
-         <th>NOMBRE COMPRADOR</th>
-         <th>IDENTIFICACION</th>
-         <th>PAIS</th>
-         <th>EDAD</th>
-         <th>SEXO</th>
-       </tr>
-    </thead>
-    <tbody>
-      {Object.keys(item).map((key) => (
-        <tr key={item[key].id}>
-        <td>{item[key].fruta}</td>
-        <td>{item[key].nombreDescripcion}</td>
-        <td>{item[key].nombreComprador}</td>
-        <td>{item[key].identification}</td>
-        <td>{item[key].npais}</td>
-        <td>{item[key].nedad}</td>
-        <td>{item[key].nsexo}</td>
-       ))
-      }
-    </tbody>
-</table>
+
                 <div className='col-4'>
                     <h4 className='text-center'>
                         {
                             modoEdicion ? 'Editar Frutas' : 'Agregar Frutas'
                         }
                     </h4>
-                    <form onSubmit={modoEdicion ? editarFrutas : guardarFrutas}>
+                    <form onSubmit={modoEdicion ? handleEditar : handleSubmit}>
                         <input type="text"
                             className="form-control mb-2"
                             placeholder='Ingrese Fruta'
@@ -234,6 +308,7 @@ const Formulario = () => {
                             className="form-control mb-2"
                             placeholder='Ingrese identificacion'
                             value={identificacion}
+                            onKeyDown={e => ['e', 'E', '-', '+', ',', '.'].includes(e.key) && e.preventDefault()}
                             onChange={(e) => setidentificacion(e.target.value)} />
                         <input type="text"
                             className="form-control mb-2"
@@ -244,6 +319,7 @@ const Formulario = () => {
                             className="form-control mb-2"
                             placeholder='Ingrese edad'
                             value={edad}
+                            onKeyDown={e => ['e', 'E', '-', '+', ',', '.'].includes(e.key) && e.preventDefault()}
                             onChange={(e) => setedad(e.target.value)} />
                         <input type="text"
                             className="form-control mb-2"
@@ -275,13 +351,20 @@ const Formulario = () => {
 
                 </div>
             </div>
+            <hr />
+            < div className='row d-flex justify-content-center'>
+                <div className='col-8'>
+                    <h4 className='text-center'>Listado de frutas</h4>
+                    <TableData listaFrutas={listaFrutas} eliminar={eliminar} editar={editar} />
+                </div>
+            </div>
         </div>
 
-        
+
 
 
     )
 
-                    
+
 }
 export default Formulario
