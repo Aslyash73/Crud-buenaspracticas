@@ -275,7 +275,7 @@ const Formulario = () => {
     return (
 
         <div className='container mt-5'>
-            <h1 className="text-center">CRUD BÁSCIO BUENAS PRÁCTICAS</h1>
+            <h1 className="text-center">CRUD BASICO BUENAS PRÁCTICAS</h1>
             <hr />
             <div className='text-center d-flex justify-content-between'>
 
