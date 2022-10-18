@@ -5,14 +5,16 @@ import { collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot } from 'fireb
 
 
 const Formulario = () => {
-    const [fruta, setFruta] = useState('')
+    const [nombre, setNombre] = useState('')
     const [errors, setErrors] = useState({})
     const [descripcion, setDescripcion] = useState('')
-    const [nombreComprador, setnombreComprador] = useState('')
+    const [apellido, setApellido] = useState('')
     const [identificacion, setidentificacion] = useState('')
     const [pais, setpais] = useState('')
     const [edad, setedad] = useState('')
     const [sexo, setsexo] = useState('')
+    const [imagen, setImagen] = useState('')
+    const [loader, setLoader] = useState(false)
 
     const [listaFrutas, setListaFrutas] = useState([])
     const [modoEdicion, setModoEdicion] = useState(false)
@@ -20,8 +22,10 @@ const Formulario = () => {
 
 
 
+    const texto_alt = 'esto es una imagen de picsum'
 
     useEffect(() => {
+        setLoader(true)
         const obtenerDatos = async () => {
             try {
                 await onSnapshot(collection(db, "frutas"), (query) => {
@@ -31,8 +35,20 @@ const Formulario = () => {
                 console.log(error)
             }
         }
+        obtenerImagen();
         obtenerDatos();
     }, [])
+
+    const obtenerImagen = async () => {
+        try {
+            const res = await fetch('https://picsum.photos/300');
+            const data = res.url;
+            setLoader(false)
+            setImagen(data);
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const eliminar = async id => {
         try {
@@ -45,18 +61,18 @@ const Formulario = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!fruta.trim()) {
-            setErrors({ fruta: "la fruta es requerida" });
+        if (!nombre.trim()) {
+            setErrors({ fruta: "El Nombre es requerido" });
             return;
         }
 
         if (!descripcion.trim()) {
-            setErrors({ descripcion: "La descripcion es requerida" });
+            setErrors({ descripcion: "La ocupacion es requerida" });
             return;
         }
 
-        if (!nombreComprador.trim()) {
-            setErrors({ nombreComprador: "El nombre del comprador  es requerido" });
+        if (!apellido.trim()) {
+            setErrors({ nombreComprador: "El Apellido  es requerido" });
             return;
         }
         if (!identificacion.trim()) {
@@ -77,13 +93,14 @@ const Formulario = () => {
         }
 
 
-        setFruta('')
+        setNombre('')
         setDescripcion('')
-        setnombreComprador('')
+        setApellido('')
         setidentificacion('')
         setpais('')
         setedad('')
         setsexo('')
+        setLoader(true)
 
 
         console.log("Registrado");
@@ -94,34 +111,37 @@ const Formulario = () => {
     const guardarFrutas = async (e) => {
         try {
             const data = await addDoc(collection(db, 'frutas'), {
-                nombreFruta: fruta,
+                nombreFruta: nombre,
                 nombreDescripcion: descripcion,
-                comprador: nombreComprador,
+                comprador: apellido,
                 nidentificacion: identificacion,
                 npais: pais,
                 nedad: edad,
-                nsexo: sexo
+                nsexo: sexo,
+                imagen
             })
             setListaFrutas([
                 ...listaFrutas,
                 {
-                    nombreFruta: fruta, nombreDescripcion: descripcion, id: data.id,
-                    comprador: nombreComprador,
+                    nombreFruta: nombre, nombreDescripcion: descripcion, id: data.id,
+                    comprador: apellido,
                     nidentificacion: identificacion,
                     npais: pais,
                     nedad: edad,
-                    nsexo: sexo
+                    nsexo: sexo,
+                    imagen
                 }
             ])
 
-            setFruta('')
+            setNombre('')
             setDescripcion('')
-            setnombreComprador('')
+            setApellido('')
             setidentificacion('')
             setpais('')
             setedad('')
             setsexo('')
             setErrors('')
+            obtenerImagen();
 
         } catch (error) {
             console.log(error)
@@ -132,38 +152,42 @@ const Formulario = () => {
         try {
             const docRef = doc(db, 'frutas', id);
             await updateDoc(docRef, {
-                nombreFruta: fruta,
+                nombreFruta: nombre,
                 nombreDescripcion: descripcion,
-                comprador: nombreComprador,
+                comprador: apellido,
                 nidentificacion: identificacion,
                 npais: pais,
                 nedad: edad,
-                nsexo: sexo
+                nsexo: sexo,
+                imagen
             })
 
             const nuevoArray = listaFrutas.map(
                 item => item.id === id ? {
-                    id: id, nombreFruta: fruta,
+                    id: id, nombreFruta: nombre,
                     nombreDescripcion: descripcion,
-                    comprador: nombreComprador,
+                    comprador: apellido,
                     nidentificacion: identificacion,
                     npais: pais,
                     nedad: edad,
-                    nsexo: sexo
+                    nsexo: sexo,
+                    imagen
                 } : item
             )
 
             setListaFrutas(nuevoArray)
-            setFruta('')
+            setNombre('')
             setDescripcion('')
             setId('')
-            setnombreComprador('')
+            setApellido('')
             setidentificacion('')
             setpais('')
             setedad('')
             setsexo('')
             setModoEdicion(false)
             setErrors('')
+            obtenerImagen();
+            setLoader(true)
 
         } catch (error) {
             console.log(error)
@@ -173,7 +197,7 @@ const Formulario = () => {
     const handleEditar = async (e) => {
         e.preventDefault();
 
-        if (!fruta.trim()) {
+        if (!nombre.trim()) {
             setErrors({ fruta: "la fruta es requerida" });
             return;
         }
@@ -183,7 +207,7 @@ const Formulario = () => {
             return;
         }
 
-        if (!nombreComprador.trim()) {
+        if (!apellido.trim()) {
             setErrors({ nombreComprador: "El nombre del comprador  es requerido" });
             return;
         }
@@ -205,9 +229,9 @@ const Formulario = () => {
         }
 
 
-        setFruta('')
+        setNombre('')
         setDescripcion('')
-        setnombreComprador('')
+        setApellido('')
         setidentificacion('')
         setpais('')
         setedad('')
@@ -221,33 +245,32 @@ const Formulario = () => {
 
 
     const editar = item => {
-        setFruta(item.nombreFruta)
+        setNombre(item.nombreFruta)
         setDescripcion(item.nombreDescripcion)
-        setnombreComprador(item.comprador)
+        setApellido(item.comprador)
         setidentificacion(item.nidentificacion)
         setpais(item.npais)
         setedad(item.nedad)
         setsexo(item.nsexo)
         setId(item.id)
+        setImagen(item.imagen)
         setModoEdicion(true)
     }
 
     const cancelar = () => {
         setModoEdicion(false)
-        setFruta('')
+        setNombre('')
         setDescripcion('')
         setId('')
-        setnombreComprador('')
+        setApellido('')
         setidentificacion('')
         setpais('')
         setedad('')
         setsexo('')
+        obtenerImagen()
+        setLoader(true)
     }
 
-
-
-    const imagen = 'https://picsum.photos/300'
-    const texto_alt = 'esto es una imagen de picsum'
 
     return (
 
@@ -258,7 +281,10 @@ const Formulario = () => {
 
                 <div>
                     <h4>Imagenes aleatorias</h4>
-                    <img src={imagen} alt={texto_alt} style={{ width: '100%' }}></img>
+                    {!loader ? (<img src={imagen} alt={texto_alt} style={{ width: '18rem' }}></img>) :
+                        (<div class="spinner-border text-info" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>)}
                     {(
                         errors.fruta ||
                         errors.descripcion ||
@@ -285,45 +311,45 @@ const Formulario = () => {
                 <div className='col-4'>
                     <h4 className='text-center'>
                         {
-                            modoEdicion ? 'Editar Frutas' : 'Agregar Frutas'
+                            modoEdicion ? 'Editar Datos' : 'Datos Personales'
                         }
                     </h4>
                     <form onSubmit={modoEdicion ? handleEditar : handleSubmit}>
                         <input type="text"
                             className="form-control mb-2"
-                            placeholder='Ingrese Fruta'
-                            value={fruta}
-                            onChange={(e) => setFruta(e.target.value)} />
+                            placeholder='Ingrese su Nombre'
+                            value={nombre}
+                            onChange={(e) => setNombre(e.target.value)} />
                         <input type="text"
                             className="form-control mb-2"
-                            placeholder='Ingrese Descripción'
+                            placeholder='Ingrese su Apellido'
+                            value={apellido}
+                            onChange={(e) => setApellido(e.target.value)} />
+                        <input type="text"
+                            className="form-control mb-2"
+                            placeholder='Ingrese su Ocupacion'
                             value={descripcion}
                             onChange={(e) => setDescripcion(e.target.value)} />
-                        <input type="text"
-                            className="form-control mb-2"
-                            placeholder='Ingrese nombre del comprador'
-                            value={nombreComprador}
-                            onChange={(e) => setnombreComprador(e.target.value)} />
                         <input type="number"
                             className="form-control mb-2"
-                            placeholder='Ingrese identificacion'
+                            placeholder='Ingrese su identificacion'
                             value={identificacion}
                             onKeyDown={e => ['e', 'E', '-', '+', ',', '.'].includes(e.key) && e.preventDefault()}
                             onChange={(e) => setidentificacion(e.target.value)} />
                         <input type="text"
                             className="form-control mb-2"
-                            placeholder='Ingrese pais'
+                            placeholder='Ingrese el pais'
                             value={pais}
                             onChange={(e) => setpais(e.target.value)} />
                         <input type="number"
                             className="form-control mb-2"
-                            placeholder='Ingrese edad'
+                            placeholder='Ingrese su edad'
                             value={edad}
                             onKeyDown={e => ['e', 'E', '-', '+', ',', '.'].includes(e.key) && e.preventDefault()}
                             onChange={(e) => setedad(e.target.value)} />
                         <input type="text"
                             className="form-control mb-2"
-                            placeholder='Ingrese sexo'
+                            placeholder='Ingrese su genero'
                             value={sexo}
                             onChange={(e) => setsexo(e.target.value)} />
 
@@ -354,7 +380,7 @@ const Formulario = () => {
             <hr />
             < div className='row d-flex justify-content-center'>
                 <div className='col-8'>
-                    <h4 className='text-center'>Listado de frutas</h4>
+                    <h4 className='text-center'>Tabla de Datos</h4>
                     <TableData listaFrutas={listaFrutas} eliminar={eliminar} editar={editar} />
                 </div>
             </div>
