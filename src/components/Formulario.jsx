@@ -66,15 +66,16 @@ const Formulario = () => {
             return;
         }
 
+        if (!apellido.trim()) {
+            setErrors({ nombreComprador: "El Apellido  es requerido" });
+            return;
+        }
+
         if (!descripcion.trim()) {
             setErrors({ descripcion: "La ocupacion es requerida" });
             return;
         }
 
-        if (!apellido.trim()) {
-            setErrors({ nombreComprador: "El Apellido  es requerido" });
-            return;
-        }
         if (!identificacion.trim()) {
             setErrors({ identificacion: "La identificacion es requerida" });
             return;
@@ -87,8 +88,9 @@ const Formulario = () => {
             setErrors({ edad: "La edad es requerida" });
             return;
         }
+
         if (!sexo.trim()) {
-            setErrors({ sexo: "el sexo es requerido" });
+            setErrors({ sexo: "el genero es requerido" });
             return;
         }
 
@@ -198,19 +200,20 @@ const Formulario = () => {
         e.preventDefault();
 
         if (!nombre.trim()) {
-            setErrors({ fruta: "la fruta es requerida" });
-            return;
-        }
-
-        if (!descripcion.trim()) {
-            setErrors({ descripcion: "La descripcion es requerida" });
+            setErrors({ fruta: "El Nombre es requerido" });
             return;
         }
 
         if (!apellido.trim()) {
-            setErrors({ nombreComprador: "El nombre del comprador  es requerido" });
+            setErrors({ nombreComprador: "El Apellido  es requerido" });
             return;
         }
+
+        if (!descripcion.trim()) {
+            setErrors({ descripcion: "La ocupacion es requerida" });
+            return;
+        }
+
         if (!identificacion.trim()) {
             setErrors({ identificacion: "La identificacion es requerida" });
             return;
@@ -223,8 +226,9 @@ const Formulario = () => {
             setErrors({ edad: "La edad es requerida" });
             return;
         }
+
         if (!sexo.trim()) {
-            setErrors({ sexo: "el sexo es requerido" });
+            setErrors({ sexo: "el genero es requerido" });
             return;
         }
 
@@ -255,6 +259,7 @@ const Formulario = () => {
         setId(item.id)
         setImagen(item.imagen)
         setModoEdicion(true)
+        setErrors('')
     }
 
     const cancelar = () => {
