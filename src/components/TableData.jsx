@@ -35,7 +35,7 @@ const TableData = (props) => {
                                             <td><img
                                                 src={item.imagen}
                                                 alt="esto es una imagen de picsum"
-                                                className='img-thumbnail w-100'
+                                                className='img-thumbnail'
                                                 style={{ borderRadius: '50%' }} />
                                             </td>
                                             <td>

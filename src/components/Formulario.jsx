@@ -286,7 +286,8 @@ const Formulario = () => {
 
                 <div>
                     <h4>Imagenes aleatorias</h4>
-                    {!loader ? (<img src={imagen} alt={texto_alt} style={{ width: '18rem' }}></img>) :
+                    {!loader ? (<img src={imagen} alt={texto_alt} style={{ width: '18rem', cursor: 'pointer' }}
+                        onClick={() => { setLoader(true); obtenerImagen(); }}></img>) :
                         (<div class="spinner-border text-info" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>)}
@@ -352,11 +353,12 @@ const Formulario = () => {
                             value={edad}
                             onKeyDown={e => ['e', 'E', '-', '+', ',', '.'].includes(e.key) && e.preventDefault()}
                             onChange={(e) => setedad(e.target.value)} />
-                        <input type="text"
-                            className="form-control mb-2"
-                            placeholder='Ingrese su genero'
-                            value={sexo}
-                            onChange={(e) => setsexo(e.target.value)} />
+                        <select className='form-select' value={sexo} onChange={(e) => setsexo(e.target.value)}>
+                            <option target hidden>Seleccione su genero...</option>
+                            <option value='Masculino'>Masculino</option>
+                            <option value='Femenino'>Femenino</option>
+                            <option value='Basado'>Basado</option>
+                        </select>
 
                         {
                             modoEdicion ?
